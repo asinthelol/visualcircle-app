@@ -1,0 +1,74 @@
+@import "colors";
+@import "shortenedcss";
+
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    
+    font-family: 'Inter', 'Sans-Serif';
+    text-align: center;
+    color: $white;
+
+    background-color:   $bg-color;
+}
+
+/* Navbar Styles */
+#navbar-area {
+
+    @include flex-center(space-between, center);
+
+    max-width: 100%;
+    padding: 1em;
+
+    #navbar {
+
+        @include flex-center;
+        column-gap: 5em;
+        
+        list-style-type: none;
+
+        li { text-decoration: none; }
+
+    }
+}
+
+#logo { max-width: 2rem; }
+
+a {
+
+    text-decoration: none;
+    color: $white;
+
+}
+
+/* Main Container Styles*/
+#container {
+    @include flex-center;
+    flex: 1;
+}
+
+.button {
+    font-size: 1.25rem;
+    color: $white;
+
+    padding: 0.5rem;
+    width: 8rem;
+    
+    border-radius: 2rem;
+
+    background: transparent;
+}
+
+#explore-button {
+    background: $explore-color;
+
+    transition: filter 0.2s ease;
+
+    &:hover { filter: grayscale(30%); }
+}

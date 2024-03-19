@@ -1,0 +1,70 @@
+/* opac - opacity */
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: "Inter", "Sans-Serif";
+  text-align: center;
+  color: rgb(255, 255, 255);
+  background-color: rgb(10, 11, 28);
+}
+
+/* Navbar Styles */
+#navbar-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 100%;
+  padding: 1em;
+}
+#navbar-area #navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 5em;
+  list-style-type: none;
+}
+#navbar-area #navbar li {
+  text-decoration: none;
+}
+
+#logo {
+  max-width: 2rem;
+}
+
+a {
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+}
+
+/* Main Container Styles*/
+#container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.button {
+  font-size: 1.25rem;
+  color: rgb(255, 255, 255);
+  padding: 0.5rem;
+  width: 8rem;
+  border-radius: 2rem;
+  background: transparent;
+}
+
+#explore-button {
+  background: linear-gradient(to right, rgb(83, 3, 188), rgb(127, 87, 241));
+  transition: filter 0.2s ease;
+}
+#explore-button:hover {
+  filter: grayscale(30%);
+}
+
+/*# sourceMappingURL=styles.css.map */

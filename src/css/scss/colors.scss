@@ -1,0 +1,17 @@
+// Color variables
+$white: rgba(255, 255, 255, 1);
+$gray: rgba(255, 255, 255, 0.75);
+$dark-gray: rgba(39, 40, 57, 1);
+$opacBlack: rgba(18, 18, 18, 0.5); /* opac - opacity */
+
+$light-purple: rgba(127, 87, 241, 1);
+$dark-purple: rgba(83, 3, 188, 1);
+$shaded-light-purple: rgba(101, 69, 191, 1);
+$shaded-dark-purple: rgba(50, 2, 112, 1);
+
+$explore-color: linear-gradient(to right, $dark-purple, $light-purple);
+
+$input-text-color: rgba(255, 255, 255, 0.5);
+$divider-color: rgba(255, 255, 255, 0.25);
+
+$bg-color: rgba(10, 11, 28, 1);

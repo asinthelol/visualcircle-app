@@ -1,0 +1,126 @@
+@import "colors";
+@import "shortenedcss";
+
+// Container Styles.
+#container {
+
+    flex-direction: row;
+    column-gap: 10vw;
+
+    // Text Area Styles.
+    #text-area {
+
+        @include flex-center(center, flex-start);
+        flex-direction: column;
+        row-gap: 1.5rem;
+
+        margin-left: -1.25rem; /* Offset the 1.25rem from top right image */
+
+        .text-holder {
+            text-align: left;
+
+            .large-text {
+                font-size: 2.5rem;
+                font-weight: bold;
+            }
+
+            .normal-text { font-size: 1.25rem; }
+
+            .gray { color: $gray }
+
+        }
+
+        // End of Text Area Styles.
+
+    }
+
+    // Image Area Styles.
+    #image-area {
+
+        display: grid;
+        grid-template-columns: minmax(auto, 1fr);
+        grid-template-rows: minmax(auto, 1fr);
+
+        align-items: center;
+        justify-items: center;
+
+        margin-bottom: 3rem; // Offset 3rem from top right image.
+
+        .image-holder {
+
+            position: relative;
+            border-radius: 0.5rem;
+
+        }
+        
+        #top-left-holder {
+
+            grid-column-start: 1;
+            grid-row-start: 1;
+            grid-row-end: 1;
+        
+            width: 18rem;
+            height: 11.5rem;
+        
+            top: 2rem;
+        
+            background-image: url("../assets/base/103123878_p0.jpeg");
+            background-position-x: 40%;
+            background-position-y: 10%;
+            background-size: 1200px;
+        
+        }
+        
+        #top-right-holder {
+            grid-column-start: 2;
+            grid-row-start: 1;
+            grid-row-end: 1;
+        
+            width: 13rem;
+            height: 18rem;
+        
+            top: 3rem;
+            left: 1.25rem;
+        
+            background-image: url("../assets/base/101091322_p0.png");
+            background-position-x: 40%;
+            background-position-y: 20%;
+            background-size: 400px;
+        }
+        
+        #bottom-left-holder {
+            grid-column-start: 1;
+            grid-column-end: 1;
+            grid-row-start: 2;
+            grid-row-end: 2;
+            
+            width: 11.5rem;
+            height: 21.5rem;
+        
+            background-image: url("../assets/base/106221651_p0.png");
+            background-position-x: 25%;
+            background-size: 500px;
+        }
+        
+        #bottom-right-holder {
+            grid-column-start: 2;
+            grid-row-start: 2;
+            grid-row-end: 2;
+        
+            width: 10rem;
+            height: 10rem;
+        
+            bottom: 1.5rem;
+            right: 3.5rem;
+        
+            background-image: url("../assets/base/98035822_p0.jpeg");
+            background-position-x: 39%;
+            background-position-y: 21%;
+            background-size: 1260px;
+        }
+
+        // End of Image Area Styles.
+
+    }
+
+}
