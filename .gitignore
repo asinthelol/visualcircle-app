@@ -1,4 +1,4 @@
 node_modules
 .env
-src/assets/user-content/
+src/assets/user-content/*
 to_do.txt

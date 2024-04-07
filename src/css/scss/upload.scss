@@ -1,0 +1,80 @@
+@import "colors";
+@import "shortenedcss";
+
+// Container Styles.
+#container {
+  column-gap: 3rem;
+
+  height: 100%;
+
+  // Upload Image Area Styles.
+  #upload-image-area {
+    @include flex;
+    flex-direction: column;
+    row-gap: 1rem;
+
+    width: 20rem;
+    height: 30rem;
+
+    border-radius: 0.5rem;
+
+    background-color: $dark-gray;
+
+    #upload-icon {
+      font-size: 3rem;
+      color: $white;
+
+      padding: 2rem;
+
+      border: thin solid transparent;
+      border-radius: 4rem;
+
+      background-color: $input-bg-color;
+
+      transition: filter 0.25s ease;
+
+      &:hover {
+        filter: brightness(125%);
+      }
+    }
+
+    .image-file {
+      max-width: 100%;
+    }
+  } // End of Upload Image Area Styles.
+
+  // Upload Data Area Styles.
+  #upload-data-area {
+    @include flex;
+
+    width: 20rem;
+    height: 30rem;
+
+    border-radius: 0.5rem;
+
+    background-color: $dark-gray;
+
+    #upload-data-holder {
+      @include flex;
+      flex-direction: column;
+      row-gap: 3rem;
+    }
+
+    #title-part,
+    #artist-part,
+    #source-part {
+      @include flex;
+      flex-direction: column;
+      row-gap: 1rem;
+
+      .counter {
+        color: $input-text-color;
+      }
+    }
+  } // End of Upload Data Area Styles.
+}
+
+// Added to input fields when user tries to submit without filling them out.
+.required {
+  border: thin solid red;
+}

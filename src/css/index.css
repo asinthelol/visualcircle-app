@@ -14,16 +14,6 @@
 #container #text-area .text-holder {
   text-align: left;
 }
-#container #text-area .text-holder .large-text {
-  font-size: 2.5rem;
-  font-weight: bold;
-}
-#container #text-area .text-holder .normal-text {
-  font-size: 1.25rem;
-}
-#container #text-area .text-holder .gray {
-  color: rgba(255, 255, 255, 0.75);
-}
 #container #image-area {
   display: grid;
   grid-template-columns: minmax(auto, 1fr);

@@ -1,0 +1,63 @@
+/* opac - opacity */
+#container {
+  column-gap: 3rem;
+  height: 100%;
+}
+#container #upload-image-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 1rem;
+  width: 20rem;
+  height: 30rem;
+  border-radius: 0.5rem;
+  background-color: rgb(39, 40, 57);
+}
+#container #upload-image-area #upload-icon {
+  font-size: 3rem;
+  color: rgb(255, 255, 255);
+  padding: 2rem;
+  border: thin solid transparent;
+  border-radius: 4rem;
+  background-color: rgb(25, 25, 36);
+  transition: filter 0.25s ease;
+}
+#container #upload-image-area #upload-icon:hover {
+  filter: brightness(125%);
+}
+#container #upload-image-area .image-file {
+  max-width: 100%;
+}
+#container #upload-data-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20rem;
+  height: 30rem;
+  border-radius: 0.5rem;
+  background-color: rgb(39, 40, 57);
+}
+#container #upload-data-area #upload-data-holder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 3rem;
+}
+#container #upload-data-area #title-part, #container #upload-data-area #artist-part, #container #upload-data-area #source-part {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+#container #upload-data-area #title-part .counter, #container #upload-data-area #artist-part .counter, #container #upload-data-area #source-part .counter {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.required {
+  border: thin solid red;
+}
+
+/*# sourceMappingURL=upload.css.map */

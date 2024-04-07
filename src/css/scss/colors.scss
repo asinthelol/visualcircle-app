@@ -1,5 +1,6 @@
 // Color variables
 $white: rgba(255, 255, 255, 1);
+$black: rgba(0, 0, 0, 1);
 $gray: rgba(255, 255, 255, 0.75);
 $dark-gray: rgba(39, 40, 57, 1);
 $opacBlack: rgba(18, 18, 18, 0.5); /* opac - opacity */
@@ -10,8 +11,10 @@ $shaded-light-purple: rgba(101, 69, 191, 1);
 $shaded-dark-purple: rgba(50, 2, 112, 1);
 
 $explore-color: linear-gradient(to right, $dark-purple, $light-purple);
+$button-bg-color: rgba(29, 29, 43, 1);
 
 $input-text-color: rgba(255, 255, 255, 0.5);
+$input-bg-color: rgba(25, 25, 36, 1);
 $divider-color: rgba(255, 255, 255, 0.25);
 
 $bg-color: rgba(10, 11, 28, 1);

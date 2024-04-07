@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
-        "target": "es5", // Set the target ECMAScript version (e.g., es2015, esnext)
-        "module": "commonjs", // Module system (commonjs, amd, system, esnext)
-        "lib": ["dom", "dom.iterable", "esnext"], // Specify libraries to include
-        "allowJs": true, // Allow compiling existing JavaScript files
-        "strict": true, // Enable strict type checking
-        "outDir": "build" // Output directory for compiled JavaScript files (optional)
+        "target": "es5",
+        "module": "commonjs",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "allowJs": true,
+        "strict": true,
+        "outDir": "build",
+        "esModuleInterop": true,
     },
-    "include": ["src"]
+    "include": ["src"],
+    "isolatedModules": true,
 }
