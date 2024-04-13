@@ -27,14 +27,18 @@ async function displayImages(
   for (let image of data) {
     const search_result = document.createElement("div");
     search_result.classList.add("search-result");
-    search_result.dataset.imageName = image.image_name;
+
+    const maxLength = 17; // Adjust this value as needed
+    const truncatedName = image.image_name.length > maxLength ? image.image_name.substring(0, maxLength) + "..." : image.image_name;
+    const truncatedArtist = image.artist.length > maxLength ? image.artist.substring(0, maxLength) + "..." : image.artist;
+    search_result.dataset.imageName = truncatedName;
 
     let result_image = document.createElement("img");
     result_image.classList.add("result-image");
     result_image.src = image.file_source;
 
     let image_artist = document.createElement("p");
-    image_artist.textContent = image.artist;
+    image_artist.textContent = truncatedArtist;
 
     search_result.appendChild(result_image);
     search_result.appendChild(image_artist);

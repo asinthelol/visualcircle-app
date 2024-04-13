@@ -31,21 +31,48 @@ const ImagesTable = sequelize.define(
       type: DataTypes.STRING,
       defaultValue: "",
       allowNull: false,
+      validate: {
+        len: {
+          args: [1, 32], // Minimum and maximum length.
+          msg: 'Image name must be between 1 and 32 characters long.',
+        },
+        notEmpty: {
+          msg: 'Image name cannot be empty.',
+        },
+      },
     },
     artist: {
       type: DataTypes.STRING,
       defaultValue: "",
       allowNull: false,
+      validate: {
+        len: {
+          args: [1, 32], // You already know since you read image_name validate.
+          msg: 'Artist name must be between 1 and 32 characters long.',
+        },
+        notEmpty: {
+          msg: 'Artist name cannot be empty.',
+        },
+      },
     },
     image_source: {
       type: DataTypes.STRING,
       defaultValue: null,
-      allowNull: true,
+      allowNull: false,
+      validate: {
+        len: {
+          args: [1, 2048], // Don't even ask.
+          msg: 'Image source must be between 1 and 2048 characters long.',
+        },
+        notEmpty: {
+          msg: 'Image source cannot be empty.',
+        },
+      },
     },
     file_source: {
       type: DataTypes.STRING,
       defaultValue: "",
-      allowNull: false,
+      allowNull: true, // It needs to be null since when the image is uploaded, the file source is not known till I write it. with the image_id.
     },
   },
   {

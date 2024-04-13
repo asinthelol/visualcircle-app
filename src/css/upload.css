@@ -4,6 +4,7 @@
   height: 100%;
 }
 #container #upload-image-area {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,6 +29,17 @@
 }
 #container #upload-image-area .image-file {
   max-width: 100%;
+  max-height: 100%;
+}
+#container #upload-image-area #clear-button {
+  position: absolute;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  top: 0.5rem;
+  right: 0.5rem;
+  border: none;
+  background-color: transparent;
 }
 #container #upload-data-area {
   display: flex;
@@ -45,19 +57,27 @@
   flex-direction: column;
   row-gap: 3rem;
 }
-#container #upload-data-area #title-part, #container #upload-data-area #artist-part, #container #upload-data-area #source-part {
+#container #upload-data-area #title-part,
+#container #upload-data-area #artist-part,
+#container #upload-data-area #source-part {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   row-gap: 1rem;
 }
-#container #upload-data-area #title-part .counter, #container #upload-data-area #artist-part .counter, #container #upload-data-area #source-part .counter {
+#container #upload-data-area #title-part .counter,
+#container #upload-data-area #artist-part .counter,
+#container #upload-data-area #source-part .counter {
   color: rgba(255, 255, 255, 0.5);
 }
 
 .required {
   border: thin solid red;
+}
+
+.valid {
+  border: thin solid transparent;
 }
 
 /*# sourceMappingURL=upload.css.map */

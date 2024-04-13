@@ -9,6 +9,8 @@
 
   // Upload Image Area Styles.
   #upload-image-area {
+    position: relative;
+
     @include flex;
     flex-direction: column;
     row-gap: 1rem;
@@ -40,6 +42,22 @@
 
     .image-file {
       max-width: 100%;
+      max-height: 100%;
+    }
+
+    #clear-button {
+      position: absolute;
+
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+
+      top: 0.5rem;
+      right: 0.5rem;
+
+      border: none;
+
+      background-color: transparent;
     }
   } // End of Upload Image Area Styles.
 
@@ -77,4 +95,8 @@
 // Added to input fields when user tries to submit without filling them out.
 .required {
   border: thin solid red;
+}
+
+.valid {
+  border: thin solid transparent;
 }

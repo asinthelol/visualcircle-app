@@ -147,8 +147,8 @@ var allowedOrigins = ["http://127.0.0.1:3000/"];
 // Allows allowedOrigins, to send http requests.
 app.use(function (req, res, next) {
   var origin = req.header("Origin");
-  if (origin !== undefined && allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Origin", req.headers.origin);
+  if (origin && allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
   }
   next();
 });
@@ -156,46 +156,43 @@ var storage = multer.diskStorage({
   destination: "./src/assets/user-content",
   filename: function (req, file, cb) {
     return __awaiter(this, void 0, void 0, function () {
-      var savedImage, temp, filename, err_1;
+      var imageName, artistName, imageSource, savedImage, filename, err_1;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
-            _a.trys.push([0, 4, , 5]);
+            _a.trys.push([0, 3, , 4]);
+            imageName = req.body.image_name.trim();
+            artistName = req.body.artist_name.trim();
+            imageSource = req.body.image_source.trim();
+            if (!imageName || !artistName || !imageSource) {
+              throw new Error("Missing required fields in request body.");
+            }
             return [
               4 /*yield*/,
               db.ImagesTable.create({
-                image_name: req.body.image_name,
-                artist: req.body.artist_name,
-                image_source: req.body.image_source,
+                image_name: imageName,
+                artist: artistName,
+                image_source: imageSource,
               }),
             ];
           case 1:
             savedImage = _a.sent();
-            return [
-              4 /*yield*/,
-              db.ImagesTable.findOne({
-                where: { image_name: savedImage.image_name },
-              }),
-            ];
-          case 2:
-            temp = _a.sent();
-            filename =
-              temp.dataValues.image_id + path.extname(file.originalname);
+            filename = savedImage.image_id + path.extname(file.originalname);
             return [
               4 /*yield*/,
               savedImage.update({
                 file_source: "../../assets/user-content/".concat(filename),
               }),
             ];
-          case 3:
+          case 2:
             _a.sent();
             cb(null, filename);
-            return [3 /*break*/, 5];
-          case 4:
+            return [3 /*break*/, 4];
+          case 3:
             err_1 = _a.sent();
             console.error("Failed saving image:", err_1);
-            return [3 /*break*/, 5];
-          case 5:
+            return [3 /*break*/, 4];
+          case 4:
             return [2 /*return*/];
         }
       });
@@ -204,6 +201,8 @@ var storage = multer.diskStorage({
 });
 // Multer instance. Will be useful later.
 var upload = multer({ storage: storage });
+// TO parse json data
+app.use(express.json());
 // Fetches all images from the database.
 function getImages() {
   return __awaiter(this, void 0, void 0, function () {
@@ -261,6 +260,57 @@ app.post("/api/upload", upload.single("image"), function (req, res) {
       return [2 /*return*/];
     });
   });
+});
+app.post("/api/validate", function (req, res) {
+  try {
+    var requestBody = req.body;
+    var inputType = requestBody.type;
+    var inputData = requestBody.data;
+    switch (inputType) {
+      case "titleInput":
+        if (inputData.length > 32 || inputData.length === 0) {
+          res.status(400).json({
+            error: "Title field must be less than 32 characters and not empty.",
+          });
+        } else {
+          res.status(200).json({ message: "Title field is valid." });
+        }
+        break;
+      case "artistInput":
+        if (inputData.length > 32 || inputData.length === 0) {
+          res.status(400).json({
+            error:
+              "Artist field must be less than 32 characters and not empty.",
+          });
+        } else {
+          res.status(200).json({ message: "Artist field is valid." });
+        }
+        break;
+      case "sourceInput":
+        if (inputData.length > 2048 || inputData.length === 0) {
+          res.status(400).json({
+            error:
+              "Source field must be less than 2048 characters and not empty.",
+          });
+        } else {
+          res.status(200).json({ message: "Source field is valid." });
+        }
+        break;
+      case "fileInput":
+        if (!req.files || req.files.length === 0) {
+          res.status(400).json({ error: "No file input found." });
+        } else {
+          res.status(200).json({ message: "File input is valid." });
+        }
+        break;
+      default:
+        res.status(400).json({ error: "Invalid input type." });
+        break;
+    }
+  } catch (err) {
+    console.error("Failed validating input:", err);
+    res.status(500).json({ error: "Failed validating input." });
+  }
 });
 // Test database connection.
 db.sequelize
