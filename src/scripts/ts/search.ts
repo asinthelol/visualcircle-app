@@ -2,17 +2,13 @@
 // Replace 'http://localhost:3000/api/images' with your actual API URL.
 async function fetchAndDisplayImages() {
   try {
-    // Fetch data from the API endpoint.
     const response = await fetch("http://localhost:3000/api/images");
-
-    // Successful response check.
     if (!response.ok) {
-      console.error(`HTTP error occured. Status: ${response.status}`);
+      throw new Error(`HTTP error occured. Status: ${response.status}`);
     }
 
     // Parse and use data to display images.
-    const data: any[] = await response.json();
-    await displayImages(data);
+    await displayImages(await response.json());
   } catch (error) {
     console.error("Error fetching images:", error);
   }
@@ -22,31 +18,37 @@ async function fetchAndDisplayImages() {
 async function displayImages(
   data: { image_name: string; file_source: string; artist: string }[],
 ) {
-  const result_area = document.querySelector("#search-result-area");
+  const resultArea = document.querySelector("#search-result-area");
+  const maxLength = 17;
 
-  for (let image of data) {
-    const search_result = document.createElement("div");
-    search_result.classList.add("search-result");
+  data.forEach((image) => {
+    const searchResult = document.createElement("div");
+    searchResult.classList.add("search-result");
 
-    const maxLength = 17; // Adjust this value as needed
-    const truncatedName = image.image_name.length > maxLength ? image.image_name.substring(0, maxLength) + "..." : image.image_name;
-    const truncatedArtist = image.artist.length > maxLength ? image.artist.substring(0, maxLength) + "..." : image.artist;
-    search_result.dataset.imageName = truncatedName;
+    // If the image name or artist name is too long, truncate it and add an ellipsis.
+    const truncatedName =
+      image.image_name.length > maxLength
+        ? image.image_name.substring(0, maxLength) + "..."
+        : image.image_name;
+    const truncatedArtist =
+      image.artist.length > maxLength
+        ? image.artist.substring(0, maxLength) + "..."
+        : image.artist;
+    searchResult.dataset.imageName = truncatedName;
 
-    let result_image = document.createElement("img");
-    result_image.classList.add("result-image");
-    result_image.src = image.file_source;
+    const resultImage = document.createElement("img");
+    resultImage.classList.add("result-image");
+    resultImage.src = image.file_source;
 
-    let image_artist = document.createElement("p");
-    image_artist.textContent = truncatedArtist;
+    const imageArtist = document.createElement("p");
+    imageArtist.textContent = truncatedArtist;
 
-    search_result.appendChild(result_image);
-    search_result.appendChild(image_artist);
+    searchResult.append(resultImage, imageArtist);
 
-    if (result_area) {
-      result_area.appendChild(search_result);
+    if (resultArea) {
+      resultArea.appendChild(searchResult);
     }
-  }
+  });
 }
 
 fetchAndDisplayImages();

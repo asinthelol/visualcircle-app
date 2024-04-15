@@ -135,29 +135,30 @@ var __generator =
 // Replace 'http://localhost:3000/api/images' with your actual API URL.
 function fetchAndDisplayImages() {
   return __awaiter(this, void 0, void 0, function () {
-    var response, data, error_1;
-    return __generator(this, function (_a) {
-      switch (_a.label) {
+    var response, _a, error_1;
+    return __generator(this, function (_b) {
+      switch (_b.label) {
         case 0:
-          _a.trys.push([0, 4, , 5]);
+          _b.trys.push([0, 4, , 5]);
           return [4 /*yield*/, fetch("http://localhost:3000/api/images")];
         case 1:
-          response = _a.sent();
-          // Successful response check.
+          response = _b.sent();
           if (!response.ok) {
-            console.error(
+            throw new Error(
               "HTTP error occured. Status: ".concat(response.status),
             );
           }
+          _a = displayImages;
           return [4 /*yield*/, response.json()];
         case 2:
-          data = _a.sent();
-          return [4 /*yield*/, displayImages(data)];
+          // Parse and use data to display images.
+          return [4 /*yield*/, _a.apply(void 0, [_b.sent()])];
         case 3:
-          _a.sent();
+          // Parse and use data to display images.
+          _b.sent();
           return [3 /*break*/, 5];
         case 4:
-          error_1 = _a.sent();
+          error_1 = _b.sent();
           console.error("Error fetching images:", error_1);
           return [3 /*break*/, 5];
         case 5:
@@ -169,43 +170,33 @@ function fetchAndDisplayImages() {
 // Takes an array of image data objects and displays them in the search result area.
 function displayImages(data) {
   return __awaiter(this, void 0, void 0, function () {
-    var result_area,
-      _i,
-      data_1,
-      image,
-      search_result,
-      maxLength,
-      truncatedName,
-      truncatedArtist,
-      result_image,
-      image_artist;
+    var resultArea, maxLength;
     return __generator(this, function (_a) {
-      result_area = document.querySelector("#search-result-area");
-      for (_i = 0, data_1 = data; _i < data_1.length; _i++) {
-        image = data_1[_i];
-        search_result = document.createElement("div");
-        search_result.classList.add("search-result");
-        maxLength = 17;
-        truncatedName =
+      resultArea = document.querySelector("#search-result-area");
+      maxLength = 17;
+      data.forEach(function (image) {
+        var searchResult = document.createElement("div");
+        searchResult.classList.add("search-result");
+        // If the image name or artist name is too long, truncate it and add an ellipsis.
+        var truncatedName =
           image.image_name.length > maxLength
             ? image.image_name.substring(0, maxLength) + "..."
             : image.image_name;
-        truncatedArtist =
+        var truncatedArtist =
           image.artist.length > maxLength
             ? image.artist.substring(0, maxLength) + "..."
             : image.artist;
-        search_result.dataset.imageName = truncatedName;
-        result_image = document.createElement("img");
-        result_image.classList.add("result-image");
-        result_image.src = image.file_source;
-        image_artist = document.createElement("p");
-        image_artist.textContent = truncatedArtist;
-        search_result.appendChild(result_image);
-        search_result.appendChild(image_artist);
-        if (result_area) {
-          result_area.appendChild(search_result);
+        searchResult.dataset.imageName = truncatedName;
+        var resultImage = document.createElement("img");
+        resultImage.classList.add("result-image");
+        resultImage.src = image.file_source;
+        var imageArtist = document.createElement("p");
+        imageArtist.textContent = truncatedArtist;
+        searchResult.append(resultImage, imageArtist);
+        if (resultArea) {
+          resultArea.appendChild(searchResult);
         }
-      }
+      });
       return [2 /*return*/];
     });
   });
