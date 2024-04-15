@@ -19,14 +19,15 @@ const createWindow = () => {
 };
 
 // If all goes well, synchronize Images table from database and creates a new window.
-app.whenReady().then(() => {
-  db.ImagesTable.sync().catch((err: Error) => {
+app.whenReady().then(async () => {
+  try {
+    await db.ImagesTable.sync();
+  } catch (err) {
     console.error("Error syncing ImagesTable:", err);
-  });
+  }
 
   createWindow();
 
-  // No windows open, open a new one.
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
@@ -34,7 +35,6 @@ app.whenReady().then(() => {
   });
 });
 
-// (Works on Windows & Linux) quit application when all windows closed.
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();

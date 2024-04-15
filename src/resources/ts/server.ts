@@ -1,46 +1,27 @@
-// Imports!
-
 import { config } from "dotenv";
-config();
-
 import express = require("express");
-import { Request } from "express";
+import { Request, Response, NextFunction } from "express";
 import multer = require("multer");
-
-type FileNameCallback = (error: Error | null, filename: string) => void;
+import cors = require("cors");
+import path = require("path");
+config();
 
 const db = require("./database.js");
 
-import path = require("path");
-
-// The stuff I care about starts here
 const app = express();
 
+// CORS configuration.
 // Make sure to change the allowed domain.
 const allowedOrigins = ["http://127.0.0.1:3000/"];
+const corsOptions: cors.CorsOptions = { origin: allowedOrigins };
+app.use(cors(corsOptions));
 
-// Allows allowedOrigins, to send http requests.
-app.use(
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const origin = req.header("Origin");
-
-    if (origin && allowedOrigins.includes(origin)) {
-      res.header("Access-Control-Allow-Origin", origin);
-    }
-    next();
-  },
-);
-
-declare module "express" {
-  interface Request {
-    imageId?: string;
-  }
-}
+type FileNameCallback = (error: Error | null, filename: string) => void;
 
 const storage = multer.diskStorage({
   destination: "./src/assets/user-content",
   filename: async function (
-    req: express.Request,
+    req: Request,
     file: Express.Multer.File,
     cb: FileNameCallback,
   ) {
@@ -72,40 +53,40 @@ const storage = multer.diskStorage({
   },
 });
 
-// Multer instance. Will be useful later.
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
-// TO parse json data
 app.use(express.json());
+app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
+  console.error(err);
+  res.status(500).json({ error: err.message });
+});
 
 // Fetches all images from the database.
 async function getImages() {
   return await db.ImagesTable.findAll();
 }
 
-app.get("/api/images", async (req, res) => {
+app.get("/api/images", async (req, res, next) => {
   try {
-    const imageData = await getImages();
-    res.send(imageData);
+    const data = await getImages();
+    res.send(data);
   } catch (err) {
-    console.error("Failed sending images to client:", err);
-    res.status(500).json({ error: "Failed sending images to client." });
+    next(err);
   }
 });
 
 // Uploads image to the database and writes the file.
-app.post("/api/upload", upload.single("image"), async (req: Request, res) => {
+app.post("/api/upload", upload.single("image"), async (req, res, next) => {
   try {
-    if (!req) {
-      return res
+    if (!req.body || !req.file) {
+      res
         .status(400)
         .json({ error: "Missing required fields in request body." });
     }
 
     res.status(200).json({ message: "Image upload successful." });
   } catch (err) {
-    console.error("Image upload failed:", err);
-    res.status(500).json({ error: "Image upload failed." });
+    next(err);
   }
 });
 
@@ -115,49 +96,39 @@ interface ValidateRequest {
   data: string;
 }
 
-app.post("/api/validate", (req: Request, res) => {
+app.post("/api/validate", (req, res, next) => {
   try {
-
     const requestBody: ValidateRequest = req.body;
-    const inputType = requestBody.type;
-    const inputData = requestBody.data;
+    const { type: inputType, data: inputData } = requestBody;
+
+    const validate = (maxLength: number) =>
+      inputData.length > maxLength || inputData.length === 0
+        ? res
+          .status(400)
+          .json({
+            error: `Field must be less than ${maxLength} characters and not empty.`,
+          })
+        : res.status(200).json({ message: "Field is valid." });
 
     switch (inputType) {
       case "titleInput":
-        if (inputData.length > 32 || inputData.length === 0) {
-          res.status(400).json({ error: "Title field must be less than 32 characters and not empty." });
-        } else {
-          res.status(200).json({ message: "Title field is valid." });
-        }
-        break;
       case "artistInput":
-        if (inputData.length > 32 || inputData.length === 0) {
-          res.status(400).json({ error: "Artist field must be less than 32 characters and not empty." });
-        } else {
-          res.status(200).json({ message: "Artist field is valid." });
-        }
+        validate(32);
         break;
       case "sourceInput":
-        if (inputData.length > 2048 || inputData.length === 0) {
-          res.status(400).json({ error: "Source field must be less than 2048 characters and not empty." });
-        } else {
-          res.status(200).json({ message: "Source field is valid." });
-        }
+        validate(2048);
         break;
       case "fileInput":
-        if (!req.files || req.files.length === 0) {
-          res.status(400).json({ error: "No file input found." });
-        } else {
-          res.status(200).json({ message: "File input is valid." });
-        }
+        !req.files || req.files.length === 0
+          ? res.status(400).json({ error: "No file input found." })
+          : res.status(200).json({ message: "File input is valid." });
         break;
       default:
         res.status(400).json({ error: "Invalid input type." });
         break;
     }
   } catch (err) {
-    console.error("Failed validating input:", err);
-    res.status(500).json({ error: "Failed validating input." });
+    next(err);
   }
 });
 

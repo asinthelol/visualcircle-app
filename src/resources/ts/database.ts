@@ -34,10 +34,10 @@ const ImagesTable = sequelize.define(
       validate: {
         len: {
           args: [1, 32], // Minimum and maximum length.
-          msg: 'Image name must be between 1 and 32 characters long.',
+          msg: "Image name must be between 1 and 32 characters long.",
         },
         notEmpty: {
-          msg: 'Image name cannot be empty.',
+          msg: "Image name cannot be empty.",
         },
       },
     },
@@ -48,10 +48,10 @@ const ImagesTable = sequelize.define(
       validate: {
         len: {
           args: [1, 32], // You already know since you read image_name validate.
-          msg: 'Artist name must be between 1 and 32 characters long.',
+          msg: "Artist name must be between 1 and 32 characters long.",
         },
         notEmpty: {
-          msg: 'Artist name cannot be empty.',
+          msg: "Artist name cannot be empty.",
         },
       },
     },
@@ -62,10 +62,10 @@ const ImagesTable = sequelize.define(
       validate: {
         len: {
           args: [1, 2048], // Don't even ask.
-          msg: 'Image source must be between 1 and 2048 characters long.',
+          msg: "Image source must be between 1 and 2048 characters long.",
         },
         notEmpty: {
-          msg: 'Image source cannot be empty.',
+          msg: "Image source cannot be empty.",
         },
       },
     },

@@ -154,20 +154,10 @@ var submitButton = document.querySelector("#submit-button");
 function validateInput(input, inputName) {
   return __awaiter(this, void 0, void 0, function () {
     var response, err_1;
-    var _a;
-    return __generator(this, function (_b) {
-      switch (_b.label) {
+    return __generator(this, function (_a) {
+      switch (_a.label) {
         case 0:
-          // Validating if there is a file input
-          if (
-            input.type === "file" &&
-            !((_a = input.files) === null || _a === void 0 ? void 0 : _a.length)
-          ) {
-            return [2 /*return*/, false];
-          }
-          _b.label = 1;
-        case 1:
-          _b.trys.push([1, 3, , 4]);
+          _a.trys.push([0, 2, , 3]);
           return [
             4 /*yield*/,
             fetch("http://localhost:3000/api/validate", {
@@ -176,14 +166,14 @@ function validateInput(input, inputName) {
               body: JSON.stringify({ type: inputName, data: input.value }),
             }),
           ];
-        case 2:
-          response = _b.sent();
+        case 1:
+          response = _a.sent();
           return [2 /*return*/, response.ok];
-        case 3:
-          err_1 = _b.sent();
+        case 2:
+          err_1 = _a.sent();
           console.error("Failed to validate input:", err_1);
           return [2 /*return*/, false];
-        case 4:
+        case 3:
           return [2 /*return*/];
       }
     });
@@ -194,43 +184,52 @@ submitButton === null || submitButton === void 0
   ? void 0
   : submitButton.addEventListener("click", function (event) {
       return __awaiter(_this, void 0, void 0, function () {
-        var isValidTitle,
-          isValidArtist,
-          isValidSource,
-          tempHolders,
-          file,
+        var validations,
+          _a,
+          invalidInputs,
+          appendFormData,
           formData,
           res,
           err_2;
-        var _a, _b, _c, _d, _e;
-        return __generator(this, function (_f) {
-          switch (_f.label) {
+        var _b, _c, _d;
+        var _e, _f, _g, _h, _j;
+        return __generator(this, function (_k) {
+          switch (_k.label) {
             case 0:
               event.preventDefault();
+              _b = {};
               return [4 /*yield*/, validateInput(inputs.title, "titleInput")];
             case 1:
-              isValidTitle = _f.sent();
+              _a = [
+                ((_b.isValid = _k.sent()), (_b.holder = holders.title), _b),
+              ];
+              _c = {};
               return [4 /*yield*/, validateInput(inputs.artist, "artistInput")];
             case 2:
-              isValidArtist = _f.sent();
+              _a = _a.concat([
+                ((_c.isValid = _k.sent()), (_c.holder = holders.artist), _c),
+              ]);
+              _d = {};
               return [4 /*yield*/, validateInput(inputs.source, "sourceInput")];
             case 3:
-              isValidSource = _f.sent();
-              // Check if inputs are filled out
-              if (
-                !((_b =
-                  (_a = inputs.file) === null || _a === void 0
-                    ? void 0
-                    : _a.files) === null || _b === void 0
-                  ? void 0
-                  : _b.length)
-              ) {
-                holders.image.classList.add("required");
-                return [2 /*return*/];
-              }
-              if (!isValidTitle || !isValidArtist || !isValidSource) {
-                tempHolders = [holders.title, holders.artist, holders.source];
-                tempHolders.forEach(function (holder) {
+              validations = _a.concat([
+                ((_d.isValid = _k.sent()), (_d.holder = holders.source), _d),
+                {
+                  isValid:
+                    (_e = inputs.file) === null || _e === void 0
+                      ? void 0
+                      : _e.files.length,
+                  holder: holders.image,
+                },
+              ]);
+              invalidInputs = validations.filter(function (_a) {
+                var isValid = _a.isValid;
+                return !isValid;
+              });
+              // If there are any invalid inputs, change the classes for all (invalid) inputs
+              if (invalidInputs.length) {
+                invalidInputs.forEach(function (_a) {
+                  var holder = _a.holder;
                   holder === null || holder === void 0
                     ? void 0
                     : holder.classList.remove("valid");
@@ -240,46 +239,69 @@ submitButton === null || submitButton === void 0
                 });
                 return [2 /*return*/];
               }
-              file = inputs.file.files[0];
+              // If all inputs are valid, change the classes for all of them
+              validations.forEach(function (_a) {
+                var holder = _a.holder;
+                holder === null || holder === void 0
+                  ? void 0
+                  : holder.classList.remove("required");
+                holder === null || holder === void 0
+                  ? void 0
+                  : holder.classList.add("valid");
+              });
+              appendFormData = function (formData, fieldName, inputValue) {
+                if (inputValue) {
+                  formData.append(fieldName, inputValue);
+                }
+              };
               formData = new FormData();
-              formData.append(
+              appendFormData(
+                formData,
                 "image_name",
-                (_c = inputs.title) === null || _c === void 0
+                (_f = inputs.title) === null || _f === void 0
                   ? void 0
-                  : _c.value,
+                  : _f.value,
               );
-              formData.append(
+              appendFormData(
+                formData,
                 "artist_name",
-                (_d = inputs.artist) === null || _d === void 0
+                (_g = inputs.artist) === null || _g === void 0
                   ? void 0
-                  : _d.value,
+                  : _g.value,
               );
-              formData.append(
+              appendFormData(
+                formData,
                 "image_source",
-                (_e = inputs.source) === null || _e === void 0
+                (_h = inputs.source) === null || _h === void 0
                   ? void 0
-                  : _e.value,
+                  : _h.value,
               );
-              formData.append("image", file);
-              _f.label = 4;
+              appendFormData(
+                formData,
+                "image",
+                (_j = inputs.file) === null || _j === void 0
+                  ? void 0
+                  : _j.files[0],
+              );
+              _k.label = 4;
             case 4:
-              _f.trys.push([4, 6, , 7]);
+              _k.trys.push([4, 6, , 7]);
               return [
                 4 /*yield*/,
                 fetch("http://localhost:3000/api/upload", {
-                  // In your code, change this to the actual URL.
+                  // Change this to the API endpoint you'll use.
                   method: "POST",
                   body: formData,
                 }),
               ];
             case 5:
-              res = _f.sent();
+              res = _k.sent();
               if (res.ok) {
                 window.location.href = "../search/search.html"; // Change this to the actual URL you will use.
               }
               return [3 /*break*/, 7];
             case 6:
-              err_2 = _f.sent();
+              err_2 = _k.sent();
               console.error("Could not submit data.", err_2);
               return [3 /*break*/, 7];
             case 7:

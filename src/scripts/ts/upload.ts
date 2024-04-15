@@ -22,11 +22,6 @@ const submitButton = document.querySelector("#submit-button");
 // Make requuest to server to check if input meets requirements
 // (less or equal to than 32 characters for title and artist, and less than or equal to 2048 characters for title).
 async function validateInput(input: HTMLInputElement, inputName: string) {
-  // Validating if there is a file input
-  if (input.type === "file" && !input.files?.length) {
-    return false;
-  }
-
   try {
     const response = await fetch("http://localhost:3000/api/validate", {
       method: "POST",
@@ -46,37 +41,60 @@ submitButton?.addEventListener("click", async (event) => {
   event.preventDefault();
 
   // Validate inputs
-  const isValidTitle = await validateInput(inputs.title, "titleInput");
-  const isValidArtist = await validateInput(inputs.artist, "artistInput");
-  const isValidSource = await validateInput(inputs.source, "sourceInput");
+  const validations = [
+    {
+      isValid: await validateInput(inputs.title, "titleInput"),
+      holder: holders.title,
+    },
+    {
+      isValid: await validateInput(inputs.artist, "artistInput"),
+      holder: holders.artist,
+    },
+    {
+      isValid: await validateInput(inputs.source, "sourceInput"),
+      holder: holders.source,
+    },
+    { isValid: inputs.file?.files.length, holder: holders.image }, // tried putting this in validateInput, but it didn't work LOL
+  ];
+  const invalidInputs = validations.filter(({ isValid }) => !isValid);
 
-  // Check if inputs are filled out
-  if (!inputs.file?.files?.length) {
-    holders.image.classList.add("required");
-    return;
-  }
-
-  if (!isValidTitle || !isValidArtist || !isValidSource) {
-    const tempHolders = [holders.title, holders.artist, holders.source];
-    tempHolders.forEach((holder) => {
+  // If there are any invalid inputs, change the classes for all (invalid) inputs
+  if (invalidInputs.length) {
+    invalidInputs.forEach(({ holder }) => {
       holder?.classList.remove("valid");
       holder?.classList.add("required");
     });
     return;
   }
 
-  // If all inputs are valid, create a FormData object and append the data to it.
-  const file = inputs.file.files[0];
+  // If all inputs are valid, change the classes for all of them
+  validations.forEach(({ holder }) => {
+    holder?.classList.remove("required");
+    holder?.classList.add("valid");
+  });
+
+  // Append the data to the form data
+  const appendFormData = (
+    formData: FormData,
+    fieldName: string,
+    inputValue: string | File | undefined,
+  ) => {
+    if (inputValue) {
+      formData.append(fieldName, inputValue);
+    }
+  };
 
   const formData = new FormData();
-  formData.append("image_name", inputs.title?.value);
-  formData.append("artist_name", inputs.artist?.value);
-  formData.append("image_source", inputs.source?.value);
-  formData.append("image", file);
+  appendFormData(formData, "image_name", inputs.title?.value);
+  appendFormData(formData, "artist_name", inputs.artist?.value);
+  appendFormData(formData, "image_source", inputs.source?.value);
+  appendFormData(formData, "image", inputs.file?.files[0]);
 
+  // Ignore the errors saying the inputs may be null. If they were null, the submit form wouldn't even go through
+  // and would indicate to the user to give them a value.
   try {
     const res = await fetch("http://localhost:3000/api/upload", {
-      // In your code, change this to the actual URL.
+      // Change this to the API endpoint you'll use.
       method: "POST",
       body: formData,
     });

@@ -1,5 +1,4 @@
 "use strict";
-// Imports!
 var __awaiter =
   (this && this.__awaiter) ||
   function (thisArg, _arguments, P, generator) {
@@ -135,23 +134,18 @@ var __generator =
   };
 Object.defineProperty(exports, "__esModule", { value: true });
 var dotenv_1 = require("dotenv");
-(0, dotenv_1.config)();
 var express = require("express");
 var multer = require("multer");
-var db = require("./database.js");
+var cors = require("cors");
 var path = require("path");
-// The stuff I care about starts here
+(0, dotenv_1.config)();
+var db = require("./database.js");
 var app = express();
+// CORS configuration.
 // Make sure to change the allowed domain.
 var allowedOrigins = ["http://127.0.0.1:3000/"];
-// Allows allowedOrigins, to send http requests.
-app.use(function (req, res, next) {
-  var origin = req.header("Origin");
-  if (origin && allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Origin", origin);
-  }
-  next();
-});
+var corsOptions = { origin: allowedOrigins };
+app.use(cors(corsOptions));
 var storage = multer.diskStorage({
   destination: "./src/assets/user-content",
   filename: function (req, file, cb) {
@@ -199,10 +193,12 @@ var storage = multer.diskStorage({
     });
   },
 });
-// Multer instance. Will be useful later.
 var upload = multer({ storage: storage });
-// TO parse json data
 app.use(express.json());
+app.use(function (err, req, res, next) {
+  console.error(err);
+  res.status(500).json({ error: err.message });
+});
 // Fetches all images from the database.
 function getImages() {
   return __awaiter(this, void 0, void 0, function () {
@@ -216,22 +212,21 @@ function getImages() {
     });
   });
 }
-app.get("/api/images", function (req, res) {
+app.get("/api/images", function (req, res, next) {
   return __awaiter(void 0, void 0, void 0, function () {
-    var imageData, err_2;
+    var data, err_2;
     return __generator(this, function (_a) {
       switch (_a.label) {
         case 0:
           _a.trys.push([0, 2, , 3]);
           return [4 /*yield*/, getImages()];
         case 1:
-          imageData = _a.sent();
-          res.send(imageData);
+          data = _a.sent();
+          res.send(data);
           return [3 /*break*/, 3];
         case 2:
           err_2 = _a.sent();
-          console.error("Failed sending images to client:", err_2);
-          res.status(500).json({ error: "Failed sending images to client." });
+          next(err_2);
           return [3 /*break*/, 3];
         case 3:
           return [2 /*return*/];
@@ -240,76 +235,57 @@ app.get("/api/images", function (req, res) {
   });
 });
 // Uploads image to the database and writes the file.
-app.post("/api/upload", upload.single("image"), function (req, res) {
+app.post("/api/upload", upload.single("image"), function (req, res, next) {
   return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
       try {
-        if (!req) {
-          return [
-            2 /*return*/,
-            res
-              .status(400)
-              .json({ error: "Missing required fields in request body." }),
-          ];
+        if (!req.body || !req.file) {
+          res
+            .status(400)
+            .json({ error: "Missing required fields in request body." });
         }
         res.status(200).json({ message: "Image upload successful." });
       } catch (err) {
-        console.error("Image upload failed:", err);
-        res.status(500).json({ error: "Image upload failed." });
+        next(err);
       }
       return [2 /*return*/];
     });
   });
 });
-app.post("/api/validate", function (req, res) {
+app.post("/api/validate", function (req, res, next) {
   try {
     var requestBody = req.body;
-    var inputType = requestBody.type;
-    var inputData = requestBody.data;
+    var inputType = requestBody.type,
+      inputData_1 = requestBody.data;
+    var validate = function (maxLength) {
+      return inputData_1.length > maxLength || inputData_1.length === 0
+        ? res.status(400).json({
+            error: "Field must be less than ".concat(
+              maxLength,
+              " characters and not empty.",
+            ),
+          })
+        : res.status(200).json({ message: "Field is valid." });
+    };
     switch (inputType) {
       case "titleInput":
-        if (inputData.length > 32 || inputData.length === 0) {
-          res.status(400).json({
-            error: "Title field must be less than 32 characters and not empty.",
-          });
-        } else {
-          res.status(200).json({ message: "Title field is valid." });
-        }
-        break;
       case "artistInput":
-        if (inputData.length > 32 || inputData.length === 0) {
-          res.status(400).json({
-            error:
-              "Artist field must be less than 32 characters and not empty.",
-          });
-        } else {
-          res.status(200).json({ message: "Artist field is valid." });
-        }
+        validate(32);
         break;
       case "sourceInput":
-        if (inputData.length > 2048 || inputData.length === 0) {
-          res.status(400).json({
-            error:
-              "Source field must be less than 2048 characters and not empty.",
-          });
-        } else {
-          res.status(200).json({ message: "Source field is valid." });
-        }
+        validate(2048);
         break;
       case "fileInput":
-        if (!req.files || req.files.length === 0) {
-          res.status(400).json({ error: "No file input found." });
-        } else {
-          res.status(200).json({ message: "File input is valid." });
-        }
+        !req.files || req.files.length === 0
+          ? res.status(400).json({ error: "No file input found." })
+          : res.status(200).json({ message: "File input is valid." });
         break;
       default:
         res.status(400).json({ error: "Invalid input type." });
         break;
     }
   } catch (err) {
-    console.error("Failed validating input:", err);
-    res.status(500).json({ error: "Failed validating input." });
+    next(err);
   }
 });
 // Test database connection.
