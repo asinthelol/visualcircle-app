@@ -133,12 +133,12 @@ var __generator =
     }
   };
 Object.defineProperty(exports, "__esModule", { value: true });
-var dotenv_1 = require("dotenv");
+require("dotenv").config();
 var express = require("express");
 var multer = require("multer");
 var cors = require("cors");
 var path = require("path");
-(0, dotenv_1.config)();
+var Op = require("sequelize").Op;
 var db = require("./database.js");
 var app = express();
 // CORS configuration.
@@ -287,6 +287,48 @@ app.post("/api/validate", function (req, res, next) {
   } catch (err) {
     next(err);
   }
+});
+// Search for images based on the query.
+app.get("/api/search/:query", function (req, res, next) {
+  return __awaiter(void 0, void 0, void 0, function () {
+    var query, data, err_3;
+    var _a, _b, _c;
+    return __generator(this, function (_d) {
+      switch (_d.label) {
+        case 0:
+          _d.trys.push([0, 2, , 3]);
+          query = req.params.query;
+          return [
+            4 /*yield*/,
+            db.ImagesTable.findAll({
+              where:
+                ((_a = {}),
+                (_a[Op.or] = [
+                  {
+                    image_name:
+                      ((_b = {}), (_b[Op.like] = "%".concat(query, "%")), _b),
+                  },
+                  {
+                    artist:
+                      ((_c = {}), (_c[Op.like] = "%".concat(query, "%")), _c),
+                  },
+                ]),
+                _a),
+            }),
+          ];
+        case 1:
+          data = _d.sent();
+          res.send(data);
+          return [3 /*break*/, 3];
+        case 2:
+          err_3 = _d.sent();
+          next(err_3);
+          return [3 /*break*/, 3];
+        case 3:
+          return [2 /*return*/];
+      }
+    });
+  });
 });
 // Test database connection.
 db.sequelize

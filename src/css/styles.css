@@ -1,4 +1,15 @@
 /* opac - opacity */
+@keyframes template-holder-animation {
+  0% {
+    background-color: rgb(39, 40, 57);
+  }
+  50% {
+    background-color: rgb(52, 53, 76);
+  }
+  100% {
+    background-color: rgb(39, 40, 57);
+  }
+}
 * {
   margin: 0;
   padding: 0;
@@ -13,6 +24,9 @@ body {
   color: rgb(255, 255, 255);
   min-height: 100vh;
   background-color: rgb(10, 11, 28);
+}
+body::-webkit-scrollbar {
+  display: none;
 }
 body #navbar-area {
   display: flex;

@@ -7,7 +7,6 @@ async function fetchAndDisplayImages() {
       throw new Error(`HTTP error occured. Status: ${response.status}`);
     }
 
-    // Parse and use data to display images.
     await displayImages(await response.json());
   } catch (error) {
     console.error("Error fetching images:", error);
@@ -18,27 +17,35 @@ async function fetchAndDisplayImages() {
 async function displayImages(
   data: { image_name: string; file_source: string; artist: string }[],
 ) {
-  const resultArea = document.querySelector("#search-result-area");
+  const resultArea = document.querySelector(
+    "#search-result-area",
+  ) as HTMLElement;
   const maxLength = 17;
 
   data.forEach((image) => {
+    const {
+      image_name: imageName,
+      artist: artist,
+      file_source: source,
+    } = image;
     const searchResult = document.createElement("div");
     searchResult.classList.add("search-result");
 
     // If the image name or artist name is too long, truncate it and add an ellipsis.
     const truncatedName =
-      image.image_name.length > maxLength
-        ? image.image_name.substring(0, maxLength) + "..."
-        : image.image_name;
+      imageName.length > maxLength
+        ? imageName.substring(0, maxLength) + "..."
+        : imageName;
     const truncatedArtist =
       image.artist.length > maxLength
-        ? image.artist.substring(0, maxLength) + "..."
-        : image.artist;
+        ? artist.substring(0, maxLength) + "..."
+        : artist;
     searchResult.dataset.imageName = truncatedName;
 
+    // Create image and artist elements and append them to the search result.
     const resultImage = document.createElement("img");
     resultImage.classList.add("result-image");
-    resultImage.src = image.file_source;
+    resultImage.src = source;
 
     const imageArtist = document.createElement("p");
     imageArtist.textContent = truncatedArtist;
@@ -50,5 +57,28 @@ async function displayImages(
     }
   });
 }
-
 fetchAndDisplayImages();
+
+// Displaying iamges based on the search bar input.
+const resultArea = document.querySelector("#search-result-area") as HTMLElement;
+const searchInput = document.querySelector("#search-bar") as HTMLInputElement;
+
+searchInput.addEventListener("input", async () => {
+  try {
+    const input = searchInput.value.trim();
+
+    if (input.length === 0) {
+      resultArea.textContent = "";
+      fetchAndDisplayImages();
+      return;
+    }
+    const response = await fetch(`http://localhost:3000/api/search/${input}`);
+    const results = await response.json();
+
+    // Clear the search result area before displaying new results.
+    resultArea.textContent = "";
+    displayImages(results);
+  } catch (err) {
+    console.error("Failed fetching search results:", err);
+  }
+});

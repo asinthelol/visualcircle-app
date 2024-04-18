@@ -1,4 +1,15 @@
 /* opac - opacity */
+@keyframes template-holder-animation {
+  0% {
+    background-color: rgb(39, 40, 57);
+  }
+  50% {
+    background-color: rgb(52, 53, 76);
+  }
+  100% {
+    background-color: rgb(39, 40, 57);
+  }
+}
 #container {
   column-gap: 3rem;
   height: 100%;
@@ -14,6 +25,7 @@
   height: 30rem;
   border-radius: 0.5rem;
   background-color: rgb(39, 40, 57);
+  transition: border-color 0.25s ease;
 }
 #container #upload-image-area #upload-icon {
   font-size: 3rem;
@@ -48,7 +60,9 @@
   width: 20rem;
   height: 30rem;
   border-radius: 0.5rem;
+  border: thin solid transparent;
   background-color: rgb(39, 40, 57);
+  transition: border 0.25s ease;
 }
 #container #upload-data-area #upload-data-holder {
   display: flex;

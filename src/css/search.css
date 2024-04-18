@@ -1,4 +1,15 @@
 /* opac - opacity */
+@keyframes template-holder-animation {
+  0% {
+    background-color: rgb(39, 40, 57);
+  }
+  50% {
+    background-color: rgb(52, 53, 76);
+  }
+  100% {
+    background-color: rgb(39, 40, 57);
+  }
+}
 #container {
   flex-direction: column;
   row-gap: 5rem;
@@ -39,6 +50,27 @@
   gap: 3rem 2rem;
   width: 80%;
   height: fit-content;
+}
+#container #search-result-area .temp-search-holder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 0.5rem;
+}
+#container #search-result-area .temp-search-holder .temp-search-result {
+  width: 12rem;
+  height: 12rem;
+  border-radius: 0.5rem;
+  background-color: rgb(39, 40, 57);
+  animation: template-holder-animation 2.5s infinite;
+}
+#container #search-result-area .temp-search-holder .temp-artist-result {
+  width: 12rem;
+  height: 1rem;
+  border-radius: 0.5rem;
+  background-color: rgb(39, 40, 57);
+  animation: template-holder-animation 2.5s infinite;
 }
 #container #search-result-area .search-result {
   position: relative;

@@ -1,10 +1,10 @@
-import { config } from "dotenv";
+require("dotenv").config();
 import express = require("express");
 import { Request, Response, NextFunction } from "express";
 import multer = require("multer");
 import cors = require("cors");
 import path = require("path");
-config();
+const { Op } = require("sequelize");
 
 const db = require("./database.js");
 
@@ -103,11 +103,9 @@ app.post("/api/validate", (req, res, next) => {
 
     const validate = (maxLength: number) =>
       inputData.length > maxLength || inputData.length === 0
-        ? res
-          .status(400)
-          .json({
-            error: `Field must be less than ${maxLength} characters and not empty.`,
-          })
+        ? res.status(400).json({
+          error: `Field must be less than ${maxLength} characters and not empty.`,
+        })
         : res.status(200).json({ message: "Field is valid." });
 
     switch (inputType) {
@@ -127,6 +125,25 @@ app.post("/api/validate", (req, res, next) => {
         res.status(400).json({ error: "Invalid input type." });
         break;
     }
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Search for images based on the query.
+app.get("/api/search/:query", async (req, res, next) => {
+  try {
+    const query = req.params.query;
+    const data = await db.ImagesTable.findAll({
+      where: {
+        [Op.or]: [
+          { image_name: { [Op.like]: `%${query}%` } },
+          { artist: { [Op.like]: `%${query}%` } },
+        ],
+      },
+    });
+
+    res.send(data);
   } catch (err) {
     next(err);
   }

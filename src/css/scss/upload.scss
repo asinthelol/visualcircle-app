@@ -22,6 +22,8 @@
 
     background-color: $dark-gray;
 
+    transition: border-color 0.25s ease;
+
     #upload-icon {
       font-size: 3rem;
       color: $white;
@@ -69,8 +71,11 @@
     height: 30rem;
 
     border-radius: 0.5rem;
+    border: thin solid transparent;
 
     background-color: $dark-gray;
+
+    transition: border 0.25s ease;
 
     #upload-data-holder {
       @include flex;

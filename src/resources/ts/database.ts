@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes, Dialect } from "sequelize"; // Used instead of mySQL because of ER_NOT_SUPPORTED_AUTH_MODE error.
+import { Sequelize, DataTypes, Dialect, Op } from "sequelize"; // Used instead of mySQL because of ER_NOT_SUPPORTED_AUTH_MODE error.
 import * as dotenv from "dotenv";
 dotenv.config();
 

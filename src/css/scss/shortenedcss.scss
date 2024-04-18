@@ -3,3 +3,17 @@
   justify-content: $justify-content;
   align-items: $align-items;
 }
+
+@keyframes template-holder-animation {
+  0% {
+    background-color: $dark-gray;
+  }
+
+  50% {
+    background-color: $lighter-dark-gray;
+  }
+
+  100% {
+    background-color: $dark-gray;
+  }
+}

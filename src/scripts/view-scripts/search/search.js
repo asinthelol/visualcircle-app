@@ -131,6 +131,7 @@ var __generator =
       return { value: op[0] ? op[1] : void 0, done: true };
     }
   };
+var _this = this;
 // Fetches a list of images and their data from the specified endpoint.
 // Replace 'http://localhost:3000/api/images' with your actual API URL.
 function fetchAndDisplayImages() {
@@ -151,10 +152,8 @@ function fetchAndDisplayImages() {
           _a = displayImages;
           return [4 /*yield*/, response.json()];
         case 2:
-          // Parse and use data to display images.
           return [4 /*yield*/, _a.apply(void 0, [_b.sent()])];
         case 3:
-          // Parse and use data to display images.
           _b.sent();
           return [3 /*break*/, 5];
         case 4:
@@ -175,21 +174,25 @@ function displayImages(data) {
       resultArea = document.querySelector("#search-result-area");
       maxLength = 17;
       data.forEach(function (image) {
+        var imageName = image.image_name,
+          artist = image.artist,
+          source = image.file_source;
         var searchResult = document.createElement("div");
         searchResult.classList.add("search-result");
         // If the image name or artist name is too long, truncate it and add an ellipsis.
         var truncatedName =
-          image.image_name.length > maxLength
-            ? image.image_name.substring(0, maxLength) + "..."
-            : image.image_name;
+          imageName.length > maxLength
+            ? imageName.substring(0, maxLength) + "..."
+            : imageName;
         var truncatedArtist =
           image.artist.length > maxLength
-            ? image.artist.substring(0, maxLength) + "..."
-            : image.artist;
+            ? artist.substring(0, maxLength) + "..."
+            : artist;
         searchResult.dataset.imageName = truncatedName;
+        // Create image and artist elements and append them to the search result.
         var resultImage = document.createElement("img");
         resultImage.classList.add("result-image");
-        resultImage.src = image.file_source;
+        resultImage.src = source;
         var imageArtist = document.createElement("p");
         imageArtist.textContent = truncatedArtist;
         searchResult.append(resultImage, imageArtist);
@@ -202,3 +205,42 @@ function displayImages(data) {
   });
 }
 fetchAndDisplayImages();
+// Displaying iamges based on the search bar input.
+var resultArea = document.querySelector("#search-result-area");
+var searchInput = document.querySelector("#search-bar");
+searchInput.addEventListener("input", function () {
+  return __awaiter(_this, void 0, void 0, function () {
+    var input, response, results, err_1;
+    return __generator(this, function (_a) {
+      switch (_a.label) {
+        case 0:
+          _a.trys.push([0, 3, , 4]);
+          input = searchInput.value.trim();
+          if (input.length === 0) {
+            resultArea.textContent = "";
+            fetchAndDisplayImages();
+            return [2 /*return*/];
+          }
+          return [
+            4 /*yield*/,
+            fetch("http://localhost:3000/api/search/".concat(input)),
+          ];
+        case 1:
+          response = _a.sent();
+          return [4 /*yield*/, response.json()];
+        case 2:
+          results = _a.sent();
+          // Clear the search result area before displaying new results.
+          resultArea.textContent = "";
+          displayImages(results);
+          return [3 /*break*/, 4];
+        case 3:
+          err_1 = _a.sent();
+          console.error("Failed fetching search results:", err_1);
+          return [3 /*break*/, 4];
+        case 4:
+          return [2 /*return*/];
+      }
+    });
+  });
+});

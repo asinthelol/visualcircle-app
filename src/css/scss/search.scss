@@ -8,9 +8,6 @@
 
   margin-bottom: 4rem;
 
-  #header-area {
-  } // Will be filled in a later update.
-
   // Search Bar Styles.
   #search-bar-holder {
     @include flex(column, center);
@@ -59,6 +56,37 @@
 
     width: 80%;
     height: fit-content;
+
+    .search-result-template {
+    }
+
+    .temp-search-holder {
+      @include flex(center, center);
+      flex-direction: column;
+      row-gap: 0.5rem;
+
+      .temp-search-result {
+        width: 12rem;
+        height: 12rem;
+
+        border-radius: 0.5rem;
+
+        background-color: $dark-gray;
+
+        animation: template-holder-animation 2.5s infinite;
+      }
+
+      .temp-artist-result {
+        width: 12rem;
+        height: 1rem;
+
+        border-radius: 0.5rem;
+
+        background-color: $dark-gray;
+
+        animation: template-holder-animation 2.5s infinite;
+      }
+    }
 
     // Went for something similar to what Dribbble has.
     .search-result {
