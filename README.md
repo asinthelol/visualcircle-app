@@ -32,7 +32,7 @@ npm install
 ```
 
 4. Setup environment variables:
-- Create a .env file in the ./src directory
+- Create a .env file outside the ./src directory
 - Define these environment variables:
   - DB (Database name)
   - DB_HOST (Database host)
