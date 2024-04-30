@@ -1,5 +1,19 @@
 /* opac - opacity */
+@keyframes template-holder-animation {
+  0% {
+    background-color: rgb(39, 40, 57);
+  }
+  50% {
+    background-color: rgb(52, 53, 76);
+  }
+  100% {
+    background-color: rgb(39, 40, 57);
+  }
+}
 #container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: row;
   column-gap: 10vw;
 }

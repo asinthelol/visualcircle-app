@@ -173,7 +173,7 @@ function displayImages(data) {
     return __generator(this, function (_a) {
       resultArea = document.querySelector("#search-result-area");
       maxLength = 17;
-      data.forEach(function (image) {
+      data.forEach(function (image, index) {
         var imageName = image.image_name,
           artist = image.artist,
           source = image.file_source;
@@ -193,9 +193,15 @@ function displayImages(data) {
         var resultImage = document.createElement("img");
         resultImage.classList.add("result-image");
         resultImage.src = source;
+        resultImage.loading = "lazy";
+        // create an anchor tag that links to the image page and surrounds the image.
+        var imageLink = document.createElement("a");
+        imageLink.classList.add("image-link");
+        imageLink.href = "../images/".concat(index + 1, ".html");
+        imageLink.appendChild(resultImage);
         var imageArtist = document.createElement("p");
         imageArtist.textContent = truncatedArtist;
-        searchResult.append(resultImage, imageArtist);
+        searchResult.append(imageLink, imageArtist);
         if (resultArea) {
           resultArea.appendChild(searchResult);
         }

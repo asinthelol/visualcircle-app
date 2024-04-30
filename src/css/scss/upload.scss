@@ -3,6 +3,7 @@
 
 // Container Styles.
 #container {
+  @include flex;
   column-gap: 3rem;
 
   height: 100%;

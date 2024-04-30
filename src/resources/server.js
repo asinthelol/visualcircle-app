@@ -137,8 +137,10 @@ require("dotenv").config();
 var express = require("express");
 var multer = require("multer");
 var cors = require("cors");
+var fs = require("fs");
 var path = require("path");
 var Op = require("sequelize").Op;
+var handlebars = require("handlebars");
 var db = require("./database.js");
 var app = express();
 // CORS configuration.
@@ -150,15 +152,23 @@ var storage = multer.diskStorage({
   destination: "./src/assets/user-content",
   filename: function (req, file, cb) {
     return __awaiter(this, void 0, void 0, function () {
-      var imageName, artistName, imageSource, savedImage, filename, err_1;
+      var imageName,
+        artistName,
+        imageSource,
+        savedImage,
+        filename,
+        templateContent,
+        template,
+        newPage,
+        err_1;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
             _a.trys.push([0, 3, , 4]);
             imageName = req.body.image_name.trim();
             artistName = req.body.artist_name.trim();
-            imageSource = req.body.image_source.trim();
-            if (!imageName || !artistName || !imageSource) {
+            imageSource = req.body.image_source?.trim();
+            if (!imageName || !artistName) {
               throw new Error("Missing required fields in request body.");
             }
             return [
@@ -180,6 +190,21 @@ var storage = multer.diskStorage({
             ];
           case 2:
             _a.sent();
+            templateContent = fs.readFileSync(
+              "src/views/template/images.hbs",
+              "utf8",
+            );
+            template = handlebars.compile(templateContent);
+            newPage = template({
+              imageName: imageName,
+              artist: artistName,
+              imageSource: imageSource,
+              fileSource: "../../assets/user-content/".concat(filename),
+            });
+            fs.writeFileSync(
+              "src/views/images/".concat(savedImage.image_id, ".html"),
+              newPage,
+            );
             cb(null, filename);
             return [3 /*break*/, 4];
           case 3:

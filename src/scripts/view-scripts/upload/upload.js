@@ -191,34 +191,28 @@ submitButton === null || submitButton === void 0
           formData,
           res,
           err_2;
-        var _b, _c, _d;
-        var _e, _f, _g, _h, _j;
-        return __generator(this, function (_k) {
-          switch (_k.label) {
+        var _b, _c;
+        var _d, _e, _f, _g, _h;
+        return __generator(this, function (_j) {
+          switch (_j.label) {
             case 0:
               event.preventDefault();
               _b = {};
               return [4 /*yield*/, validateInput(inputs.title, "titleInput")];
             case 1:
               _a = [
-                ((_b.isValid = _k.sent()), (_b.holder = holders.title), _b),
+                ((_b.isValid = _j.sent()), (_b.holder = holders.title), _b),
               ];
               _c = {};
               return [4 /*yield*/, validateInput(inputs.artist, "artistInput")];
             case 2:
-              _a = _a.concat([
-                ((_c.isValid = _k.sent()), (_c.holder = holders.artist), _c),
-              ]);
-              _d = {};
-              return [4 /*yield*/, validateInput(inputs.source, "sourceInput")];
-            case 3:
               validations = _a.concat([
-                ((_d.isValid = _k.sent()), (_d.holder = holders.source), _d),
+                ((_c.isValid = _j.sent()), (_c.holder = holders.artist), _c),
                 {
                   isValid:
-                    (_e = inputs.file) === null || _e === void 0
+                    (_d = inputs.file) === null || _d === void 0
                       ? void 0
-                      : _e.files.length,
+                      : _d.files.length,
                   holder: holders.image,
                 },
               ]);
@@ -258,34 +252,34 @@ submitButton === null || submitButton === void 0
               appendFormData(
                 formData,
                 "image_name",
-                (_f = inputs.title) === null || _f === void 0
+                (_e = inputs.title) === null || _e === void 0
+                  ? void 0
+                  : _e.value,
+              );
+              appendFormData(
+                formData,
+                "artist_name",
+                (_f = inputs.artist) === null || _f === void 0
                   ? void 0
                   : _f.value,
               );
               appendFormData(
                 formData,
-                "artist_name",
-                (_g = inputs.artist) === null || _g === void 0
+                "image_source",
+                (_g = inputs.source) === null || _g === void 0
                   ? void 0
                   : _g.value,
               );
               appendFormData(
                 formData,
-                "image_source",
-                (_h = inputs.source) === null || _h === void 0
-                  ? void 0
-                  : _h.value,
-              );
-              appendFormData(
-                formData,
                 "image",
-                (_j = inputs.file) === null || _j === void 0
+                (_h = inputs.file) === null || _h === void 0
                   ? void 0
-                  : _j.files[0],
+                  : _h.files[0],
               );
-              _k.label = 4;
-            case 4:
-              _k.trys.push([4, 6, , 7]);
+              _j.label = 3;
+            case 3:
+              _j.trys.push([3, 5, , 6]);
               return [
                 4 /*yield*/,
                 fetch("http://localhost:3000/api/upload", {
@@ -294,17 +288,17 @@ submitButton === null || submitButton === void 0
                   body: formData,
                 }),
               ];
-            case 5:
-              res = _k.sent();
+            case 4:
+              res = _j.sent();
               if (res.ok) {
                 window.location.href = "../search/search.html"; // Change this to the actual URL you will use.
               }
-              return [3 /*break*/, 7];
-            case 6:
-              err_2 = _k.sent();
+              return [3 /*break*/, 6];
+            case 5:
+              err_2 = _j.sent();
               console.error("Could not submit data.", err_2);
-              return [3 /*break*/, 7];
-            case 7:
+              return [3 /*break*/, 6];
+            case 6:
               return [2 /*return*/];
           }
         });

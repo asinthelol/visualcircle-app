@@ -11,6 +11,10 @@
   }
 }
 #container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
   column-gap: 3rem;
   height: 100%;
 }
@@ -19,6 +23,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: row;
   flex-direction: column;
   row-gap: 1rem;
   width: 20rem;
@@ -57,6 +62,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: row;
   width: 20rem;
   height: 30rem;
   border-radius: 0.5rem;
@@ -68,6 +74,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: row;
   flex-direction: column;
   row-gap: 3rem;
 }
@@ -77,6 +84,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: row;
   flex-direction: column;
   row-gap: 1rem;
 }

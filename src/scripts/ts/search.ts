@@ -22,7 +22,7 @@ async function displayImages(
   ) as HTMLElement;
   const maxLength = 17;
 
-  data.forEach((image) => {
+  data.forEach((image, index) => {
     const {
       image_name: imageName,
       artist: artist,
@@ -46,11 +46,18 @@ async function displayImages(
     const resultImage = document.createElement("img");
     resultImage.classList.add("result-image");
     resultImage.src = source;
+    resultImage.loading = "lazy";
+
+    // create an anchor tag that links to the image page and surrounds the image.
+    const imageLink = document.createElement("a");
+    imageLink.classList.add("image-link");
+    imageLink.href = `../images/${index + 1}.html`; // +1 because the image_id starts from 1.
+    imageLink.appendChild(resultImage);
 
     const imageArtist = document.createElement("p");
     imageArtist.textContent = truncatedArtist;
 
-    searchResult.append(resultImage, imageArtist);
+    searchResult.append(imageLink, imageArtist);
 
     if (resultArea) {
       resultArea.appendChild(searchResult);

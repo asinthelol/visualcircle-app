@@ -50,10 +50,6 @@ submitButton?.addEventListener("click", async (event) => {
       isValid: await validateInput(inputs.artist, "artistInput"),
       holder: holders.artist,
     },
-    {
-      isValid: await validateInput(inputs.source, "sourceInput"),
-      holder: holders.source,
-    },
     { isValid: inputs.file?.files.length, holder: holders.image }, // tried putting this in validateInput, but it didn't work LOL
   ];
   const invalidInputs = validations.filter(({ isValid }) => !isValid);

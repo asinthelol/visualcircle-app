@@ -32,6 +32,7 @@ body #navbar-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: row;
   max-width: 100%;
   padding: 1em;
 }
@@ -39,6 +40,7 @@ body #navbar-area #navbar {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: row;
   column-gap: 5em;
   list-style-type: none;
 }
@@ -50,8 +52,6 @@ body #navbar-area #logo {
 }
 body #container {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex: 1;
 }
 
@@ -63,6 +63,7 @@ a {
 .button {
   font-size: 1.25rem;
   color: rgb(127, 87, 241);
+  cursor: pointer;
   padding: 0.5rem;
   width: 8rem;
   border: thin solid rgb(127, 87, 241);
@@ -114,6 +115,7 @@ input[type=search]::-webkit-search-results-decoration {
   display: flex;
   justify-content: column;
   align-items: center;
+  flex-direction: row;
   column-gap: 1rem;
   padding: 0.5rem 1rem;
   width: 15rem;

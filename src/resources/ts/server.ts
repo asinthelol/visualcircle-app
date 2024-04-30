@@ -3,8 +3,10 @@ import express = require("express");
 import { Request, Response, NextFunction } from "express";
 import multer = require("multer");
 import cors = require("cors");
+import fs = require("fs");
 import path = require("path");
 const { Op } = require("sequelize");
+const handlebars = require('handlebars');
 
 const db = require("./database.js");
 
@@ -45,6 +47,19 @@ const storage = multer.diskStorage({
       await savedImage.update({
         file_source: `../../assets/user-content/${filename}`,
       });
+
+
+      // Creating a new page for the image.
+      const templateContent = fs.readFileSync('src/views/template/images.hbs', 'utf8');
+      const template = handlebars.compile(templateContent);
+      const newPage = template({
+        imageName: imageName,
+        artist: artistName,
+        imageSource: imageSource,
+        fileSource: `../../assets/user-content/${filename}`
+      });
+
+      fs.writeFileSync(`src/views/images/${savedImage.image_id}.html`, newPage);
 
       cb(null, filename);
     } catch (err) {

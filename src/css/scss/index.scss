@@ -3,13 +3,12 @@
 
 // Container Styles.
 #container {
-  flex-direction: row;
+  @include flex;
   column-gap: 10vw;
 
   // Text Area Styles.
   #text-area {
-    @include flex(center, flex-start);
-    flex-direction: column;
+    @include flex(center, flex-start, column);
     row-gap: 1.5rem;
 
     margin-left: -1.25rem; /* Offset the 1.25rem from top right image */

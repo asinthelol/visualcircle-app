@@ -62,10 +62,10 @@ var ImagesTable = sequelize.define(
     image_source: {
       type: sequelize_1.DataTypes.STRING,
       defaultValue: null,
-      allowNull: false,
+      allowNull: true,
       validate: {
         len: {
-          args: [1, 2048], // Don't even ask.
+          args: [1, 2048], // It's there to prevent long image sources.
           msg: "Image source must be between 1 and 2048 characters long.",
         },
         notEmpty: {

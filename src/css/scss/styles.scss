@@ -48,7 +48,7 @@ body {
 
   // Container Styles.
   #container {
-    @include flex;
+    display: flex;
     flex: 1;
   } // End of Container Styles.
 }
@@ -62,6 +62,7 @@ a {
 .button {
   font-size: 1.25rem;
   color: $light-purple;
+  cursor: pointer;
 
   padding: 0.5rem;
   width: 8rem;

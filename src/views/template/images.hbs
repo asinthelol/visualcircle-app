@@ -1,11 +1,12 @@
+<!DOCTYPE html>
 <!doctype html>
 <html lang="en-US">
   <head>
-    <title>Visual Circle</title>
+    <title>Visual Circle | Images</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="../../css/styles.css" />
-    <link rel="stylesheet" href="../../css/###.css" />
+    <link rel="stylesheet" href="../../css/images.css" />
     <!-- Replace with actual css file -->
 
     <!-- Inter Font -->
@@ -30,16 +31,32 @@
         <li><a href="../upload/upload.html">Upload</a></li>
         <li>
           <a href="../search/search.html"
-            ><button class="button explore-button">Explore</button></a
+            ><button class="button" id="explore-button">Explore</button></a
           >
         </li>
       </ul>
     </section>
 
     <!-- Main Container -->
-    <main id="container"></main>
+    <main id="container">
+      <section id="image-area">
+        <img src={{fileSource}} alt="Image" id="image" />
+      </section>
 
-    <script src="../../scripts/###.js"></script>
+      <section id="image-info-area">
+        <div id="image-info-holder">
+          <h1 id="image-name">{{imageName}}</h1>
+          <p id="artist-name">{{artist}}</p>
+          <p id="image-source">{{imageSource}}</p>
+        </div>
+        <button class="button explore-button" id="download-button">
+          Download
+        </button>
+        <a id="download-link" href={{fileSource}} download={{imageName}} style="display: none"></a>
+      </section>
+    </main>
+
+    <script src="../../scripts/view-scripts/images/images.js"></script>
     <!-- Replace with actual javascript file -->
   </body>
 </html>
