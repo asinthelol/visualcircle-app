@@ -17,17 +17,17 @@
 **To run Visual Circle, follow these steps**
 
 1. Clone the reposity in terminal:
-```console
+```bash
 git clone https://github.com/asinthelol/visualcircle-app.git
 ```
 
 2. Enter the project directory:
-```console
+```bash
 cd visualcircle-app
 ```
 
 3. Install the dependencies:
-```console
+```bash
 npm install
 ```
 
@@ -41,6 +41,6 @@ npm install
   - DB_DIALECT (Language for database e.g. mysql)
 
 5. Start the application
-```console
+```bash
 npm run dev
 ```
