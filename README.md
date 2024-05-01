@@ -6,14 +6,12 @@
 - Upload
 
 ## Languages Used
-- Frontend
-  - HTML
-  - CSS
-  - Typescript / Javascript
-- Backend
-  - Express.js
+- HTML
+- SCSS
+- Typescript
+- Handlebars
 
-## How To Use
+## How To Install
 **To run Visual Circle, follow these steps**
 
 1. Clone the reposity in terminal:
@@ -40,7 +38,8 @@ npm install
   - DB_PASSWORD (User password)
   - DB_DIALECT (Language for database e.g. mysql)
 
-5. Start the application
-```bash
-npm run dev
-```
+## How To Use
+1. Click on "Upload" in the navbar.
+2. Select an image to upload and fill in the required parameters.
+3. Press submit.
+4. Download an by clicking on an image and clicking the download button.
