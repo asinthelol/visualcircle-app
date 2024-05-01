@@ -167,8 +167,8 @@ var storage = multer.diskStorage({
             _a.trys.push([0, 3, , 4]);
             imageName = req.body.image_name.trim();
             artistName = req.body.artist_name.trim();
-            imageSource = req.body.image_source?.trim();
-            if (!imageName || !artistName) {
+            imageSource = req.body.image_source.trim();
+            if (!imageName || !artistName || !imageSource) {
               throw new Error("Missing required fields in request body.");
             }
             return [
@@ -201,6 +201,9 @@ var storage = multer.diskStorage({
               imageSource: imageSource,
               fileSource: "../../assets/user-content/".concat(filename),
             });
+            if (!fs.existsSync("src/views/images/")) {
+              fs.mkdirSync("src/views/images/", { recursive: true });
+            }
             fs.writeFileSync(
               "src/views/images/".concat(savedImage.image_id, ".html"),
               newPage,

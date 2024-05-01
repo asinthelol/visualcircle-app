@@ -59,6 +59,10 @@ const storage = multer.diskStorage({
         fileSource: `../../assets/user-content/${filename}`
       });
 
+      if (!fs.existsSync('src/views/images/')) {
+        fs.mkdirSync('src/views/images/', { recursive: true });
+      }
+
       fs.writeFileSync(`src/views/images/${savedImage.image_id}.html`, newPage);
 
       cb(null, filename);
