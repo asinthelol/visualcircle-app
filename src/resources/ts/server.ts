@@ -6,10 +6,7 @@ import cors = require("cors");
 import fs = require("fs");
 import path = require("path");
 const { Op } = require("sequelize");
-const handlebars = require('handlebars');
-
 const db = require("./database.js");
-
 const app = express();
 
 // CORS configuration.
@@ -22,55 +19,44 @@ type FileNameCallback = (error: Error | null, filename: string) => void;
 
 const storage = multer.diskStorage({
   destination: "./src/assets/user-content",
-  filename: async function (
+  filename: function (
     req: Request,
     file: Express.Multer.File,
     cb: FileNameCallback,
   ) {
     try {
-      const imageName = req.body.image_name.trim();
-      const artistName = req.body.artist_name.trim();
-      const imageSource = req.body.image_source.trim();
+      const imageName = req.body.image_name ? req.body.image_name.trim() : "";
+      const imageSource = req.body.image_source ? req.body.image_source.trim() : "";
 
-      if (!imageName || !artistName || !imageSource) {
-        throw new Error("Missing required fields in request body.");
+      if (!imageName || !imageSource) {
+        return cb(new Error("Missing required fields in request body."), "");
       }
 
-      // Save image information to the database.
-      const savedImage = await db.ImagesTable.create({
-        image_name: imageName,
-        artist: artistName,
-        image_source: imageSource,
-      });
+      db.ImagesTable.create({ image_name: imageName, image_source: imageSource })
+        .then(savedImage => {
+          const filename = savedImage.image_id + path.extname(file.originalname);
 
-      const filename = savedImage.image_id + path.extname(file.originalname); // e.g. 1.png.
-      await savedImage.update({
-        file_source: `../../assets/user-content/${filename}`,
-      });
+          // Update file source in the database
+          return savedImage.update({ file_source: `../../assets/user-content/${filename}` })
+            .then(() => {
+              // Call the callback with filename
+              cb(null, filename);
+            });
+        })
+        .catch(err => {
+          console.error("Failed saving image:", err);
+          cb(err, "");
+        });
 
 
-      // Creating a new page for the image.
-      const templateContent = fs.readFileSync('src/views/template/images.hbs', 'utf8');
-      const template = handlebars.compile(templateContent);
-      const newPage = template({
-        imageName: imageName,
-        artist: artistName,
-        imageSource: imageSource,
-        fileSource: `../../assets/user-content/${filename}`
-      });
 
-      if (!fs.existsSync('src/views/images/')) {
-        fs.mkdirSync('src/views/images/', { recursive: true });
-      }
-
-      fs.writeFileSync(`src/views/images/${savedImage.image_id}.html`, newPage);
-
-      cb(null, filename);
     } catch (err) {
       console.error("Failed saving image:", err);
+      cb(err as Error, "");  // Pass empty filename in case of error
     }
   },
 });
+
 
 const upload = multer({ storage });
 
@@ -98,16 +84,16 @@ app.get("/api/images", async (req, res, next) => {
 app.post("/api/upload", upload.single("image"), async (req, res, next) => {
   try {
     if (!req.body || !req.file) {
-      res
+      return res
         .status(400)
         .json({ error: "Missing required fields in request body." });
     }
-
     res.status(200).json({ message: "Image upload successful." });
   } catch (err) {
     next(err);
   }
 });
+
 
 // Server-side check for input validation.
 interface ValidateRequest {
@@ -120,18 +106,17 @@ app.post("/api/validate", (req, res, next) => {
     const requestBody: ValidateRequest = req.body;
     const { type: inputType, data: inputData } = requestBody;
 
-    const validate = (maxLength: number) =>
-      inputData.length > maxLength || inputData.length === 0
-        ? res.status(400).json({
+    const validate = (maxLength: number) => {
+      if (inputData.length > maxLength || inputData.length === 0) {
+        return res.status(400).json({
           error: `Field must be less than ${maxLength} characters and not empty.`,
-        })
-        : res.status(200).json({ message: "Field is valid." });
+        });
+      }
+      res.status(200).json({ message: "Field is valid." });
+    };
 
     switch (inputType) {
       case "titleInput":
-      case "artistInput":
-        validate(32);
-        break;
       case "sourceInput":
         validate(2048);
         break;
@@ -157,9 +142,9 @@ app.get("/api/search/:query", async (req, res, next) => {
       where: {
         [Op.or]: [
           { image_name: { [Op.like]: `%${query}%` } },
-          { artist: { [Op.like]: `%${query}%` } },
         ],
       },
+      limit: 20,
     });
 
     res.send(data);

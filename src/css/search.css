@@ -12,13 +12,27 @@
 }
 #container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   row-gap: 5rem;
   margin-bottom: 4rem;
 }
-#container #search-bar-holder {
+#container #search-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 3rem;
+  margin-top: 10rem;
+}
+#container #search-area #header-area {
+  font-size: 1.5rem;
+}
+#container #search-area #header-area h1 {
+  font-weight: 500;
+}
+#container #search-area #search-bar-holder {
   display: flex;
   justify-content: column;
   align-items: center;
@@ -29,10 +43,10 @@
   border-radius: 2rem;
   background-color: rgb(39, 40, 57);
 }
-#container #search-bar-holder .search-icon {
+#container #search-area #search-bar-holder .search-icon {
   color: rgba(255, 255, 255, 0.5);
 }
-#container #search-bar-holder #search-bar {
+#container #search-area #search-bar-holder #search-bar {
   flex: 1;
   font-size: 1.25rem;
   color: rgba(255, 255, 255, 0.5);
@@ -44,7 +58,7 @@
 #container #divider {
   background-color: rgba(255, 255, 255, 0.25);
   height: 0.01rem;
-  width: 80%;
+  width: 67.5%;
 }
 #container #search-result-area {
   display: flex;
@@ -84,39 +98,27 @@
   align-items: center;
   flex-direction: column;
   row-gap: 0.5rem;
-  width: 12rem;
-  height: 12rem;
 }
-#container #search-result-area .search-result::before {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  content: attr(data-image-name);
-  position: absolute;
-  bottom: 1em;
-  opacity: 0;
-  height: 30%;
-  width: 100%;
-  background: linear-gradient(to top, rgba(18, 18, 18, 0.5), transparent);
-  transition: opacity ease-out 0.25s;
-}
-#container #search-result-area .search-result:hover::before {
-  opacity: 1;
-}
-#container #search-result-area .search-result a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-}
-#container #search-result-area .search-result a .result-image {
-  width: 100%;
-  height: 100%;
+#container #search-result-area .search-result .result-image {
+  width: 20rem;
+  height: 12.5rem;
   object-fit: cover;
   border-radius: 0.5em;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+#container #search-result-area .search-result .interact-holder {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+}
+#container #search-result-area .search-result .interact-holder .download-button {
+  transition: color 0.2s ease;
+}
+#container #search-result-area .search-result .interact-holder .download-button:hover {
+  color: rgb(101, 69, 191);
 }
 
 /*# sourceMappingURL=search.css.map */

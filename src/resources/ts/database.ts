@@ -41,20 +41,6 @@ const ImagesTable = sequelize.define(
         },
       },
     },
-    artist: {
-      type: DataTypes.STRING,
-      defaultValue: "",
-      allowNull: false,
-      validate: {
-        len: {
-          args: [1, 32], // You already know since you read image_name validate.
-          msg: "Artist name must be between 1 and 32 characters long.",
-        },
-        notEmpty: {
-          msg: "Artist name cannot be empty.",
-        },
-      },
-    },
     image_source: {
       type: DataTypes.STRING,
       defaultValue: null,
