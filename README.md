@@ -1,6 +1,6 @@
 # Visual Circle
 
-### An Electron application for uploading and viewing visual content.
+### An Electron application for uploading and downloading images.
 
 ## Features
 
@@ -13,7 +13,6 @@
 - HTML
 - SCSS
 - Typescript
-- Handlebars
 
 ## How To Install
 
@@ -58,4 +57,10 @@ npm run dev
 1. Click on "Upload" in the navbar.
 2. Select an image to upload and fill in the required parameters.
 3. Press submit.
-4. Download an by clicking on an image and clicking the download button.
+4. Download an image by clicking the download icon under the photo.
+
+## Reset Database
+
+```bash
+npm run reset-db
+```
